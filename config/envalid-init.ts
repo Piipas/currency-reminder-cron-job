@@ -7,7 +7,6 @@ const env = cleanEnv(process.env, {
   // Custom Environment Variables
   BASE_CURRENCY: str({ example: "USD" }),
   TARGET_CURRENCY: str({ example: "MAD" }),
-  TARGET_VALUE: num(),
 });
 
 export default env;

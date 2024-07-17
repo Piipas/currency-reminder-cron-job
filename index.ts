@@ -14,18 +14,18 @@ const getTimeseries = async () => {
     } = await axios.get(request_url);
 
     const currentValue = response.value;
-    const latestvalue = redis.get("currencyjob:lastupdatedvalue");
+    const latestvalue = await redis.get("currencyjob:lastupdatedvalue");
 
     console.log(latestvalue, currentValue);
 
     await redis.set("currencyjob:lastupdatedvalue", currentValue);
-    await redis.set("currencyjob:previousvalue", Number(latestvalue));
 
     console.log(`${env.BASE_CURRENCY} > ${env.TARGET_CURRENCY} values stored successfully!`);
     console.log(latestvalue, currentValue);
 
+    console.log(latestvalue, Number(latestvalue));
     const guilds = await db.guild.findMany({
-      where: { AND: [{ target: { lte: currentValue } }] },
+      where: { AND: [{ target: { lte: currentValue } }, { target: { gt: Number(latestvalue) } }] },
     });
 
     if (guilds.length) {
@@ -40,5 +40,5 @@ const getTimeseries = async () => {
   }
 };
 
-schedule("*/10 * * * *", getTimeseries);
+schedule("0 * * * *", getTimeseries);
 // getTimeseries();
