@@ -5,7 +5,7 @@ import { db } from "./config/prisma-client";
 import env from "config/envalid-init";
 import { customAction } from "lib/custom-action";
 
-const getTimeseries = async () => {
+export const getTimeseries = async () => {
   try {
     const request_url = `https://api.currencybeacon.com/v1/convert?api_key=${env.EXCHANGE_RATES_API_KEY}&from=${env.BASE_CURRENCY}&to=${env.TARGET_CURRENCY}&amount=1`;
 
@@ -16,14 +16,10 @@ const getTimeseries = async () => {
     const currentValue = response.value;
     const latestvalue = await redis.get("currencyjob:lastupdatedvalue");
 
-    console.log(latestvalue, currentValue);
-
     await redis.set("currencyjob:lastupdatedvalue", currentValue);
 
     console.log(`${env.BASE_CURRENCY} > ${env.TARGET_CURRENCY} values stored successfully!`);
-    console.log(latestvalue, currentValue);
 
-    console.log(latestvalue, Number(latestvalue));
     const guilds = await db.guild.findMany({
       where: { AND: [{ target: { lte: currentValue } }, { target: { gt: Number(latestvalue) } }] },
     });
