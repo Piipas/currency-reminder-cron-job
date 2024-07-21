@@ -1,4 +1,4 @@
-import { bool, cleanEnv, num, str, url } from "envalid";
+import { cleanEnv, str } from "envalid";
 
 const env = cleanEnv(process.env, {
   // Exchange rates api
@@ -7,6 +7,10 @@ const env = cleanEnv(process.env, {
   // Custom Environment Variables
   BASE_CURRENCY: str({ example: "USD" }),
   TARGET_CURRENCY: str({ example: "MAD" }),
+
+  //Databases URLs
+  DATABASE_URL: str(),
+  REDIS_URL: str(),
 });
 
 export default env;
