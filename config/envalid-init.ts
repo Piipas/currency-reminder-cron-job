@@ -1,4 +1,4 @@
-import { cleanEnv, str } from "envalid";
+import { cleanEnv, str, url } from "envalid";
 
 const env = cleanEnv(process.env, {
   // Exchange rates api
@@ -11,6 +11,8 @@ const env = cleanEnv(process.env, {
   //Databases URLs
   DATABASE_URL: str(),
   REDIS_URL: str(),
+
+  BOT_BASE_URL: url(),
 });
 
 export default env;
