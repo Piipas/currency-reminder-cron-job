@@ -36,5 +36,5 @@ export const getTimeseries = async () => {
   }
 };
 
-schedule("0 * * * *", getTimeseries);
+schedule("* * * * *", getTimeseries);
 // getTimeseries();
